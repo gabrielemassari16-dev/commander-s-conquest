@@ -50,7 +50,7 @@ function CollectionPage() {
       <header className="px-6 py-4 flex items-center justify-between border-b border-border">
         <Link to="/" className="font-display text-xl tracking-widest">⚔️ FANTAGUERRA</Link>
         <nav className="flex gap-2">
-          <Link to="/battle" className="btn-primary text-sm" disabled={deck.length === 0 || leaders === 0}>Vai in battaglia</Link>
+          <Link to="/battle" className="btn-primary text-sm">Vai in battaglia</Link>
         </nav>
       </header>
 
