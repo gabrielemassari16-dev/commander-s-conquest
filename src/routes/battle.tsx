@@ -221,9 +221,7 @@ function BattlePage() {
                     disabled={phase === "end" || c.cost > state.playerGold}
                     onClick={() => {
                       if (phase === "battle") {
-                        // mid-battle reinforcement: drop into nearest valid player-zone tile
-                        const err = canPlace(state, c, 0, 0, "player");
-                        // try first column
+                        // mid-battle reinforcement: drop into first valid player-zone tile
                         for (let yy = 0; yy < MAP_H; yy++) {
                           for (let xx = 0; xx < 4; xx++) {
                             const e = canPlace(state, c, xx, yy, "player");
@@ -237,7 +235,8 @@ function BattlePage() {
                             }
                           }
                         }
-                        if (err) { setError(err); setTimeout(() => setError(null), 1500); }
+                        setError("Nessuno spazio libero nella tua zona");
+                        setTimeout(() => setError(null), 1500);
                       } else {
                         setSelectedCardId(selectedCardId === c.id ? null : c.id);
                       }
