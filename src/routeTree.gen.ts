@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as HowToPlayRouteImport } from './routes/how-to-play'
 import { Route as CollectionRouteImport } from './routes/collection'
+import { Route as BattleRouteImport } from './routes/battle'
 import { Route as IndexRouteImport } from './routes/index'
 
 const HowToPlayRoute = HowToPlayRouteImport.update({
@@ -23,6 +24,11 @@ const CollectionRoute = CollectionRouteImport.update({
   path: '/collection',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BattleRoute = BattleRouteImport.update({
+  id: '/battle',
+  path: '/battle',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,30 +37,34 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
   '/how-to-play': typeof HowToPlayRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
   '/how-to-play': typeof HowToPlayRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
   '/how-to-play': typeof HowToPlayRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/collection' | '/how-to-play'
+  fullPaths: '/' | '/battle' | '/collection' | '/how-to-play'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/collection' | '/how-to-play'
-  id: '__root__' | '/' | '/collection' | '/how-to-play'
+  to: '/' | '/battle' | '/collection' | '/how-to-play'
+  id: '__root__' | '/' | '/battle' | '/collection' | '/how-to-play'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BattleRoute: typeof BattleRoute
   CollectionRoute: typeof CollectionRoute
   HowToPlayRoute: typeof HowToPlayRoute
 }
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CollectionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/battle': {
+      id: '/battle'
+      path: '/battle'
+      fullPath: '/battle'
+      preLoaderRoute: typeof BattleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BattleRoute: BattleRoute,
   CollectionRoute: CollectionRoute,
   HowToPlayRoute: HowToPlayRoute,
 }
