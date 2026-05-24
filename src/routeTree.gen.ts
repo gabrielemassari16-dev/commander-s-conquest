@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UpgradesRouteImport } from './routes/upgrades'
 import { Route as HowToPlayRouteImport } from './routes/how-to-play'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as BattleRouteImport } from './routes/battle'
 import { Route as IndexRouteImport } from './routes/index'
 
+const UpgradesRoute = UpgradesRouteImport.update({
+  id: '/upgrades',
+  path: '/upgrades',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HowToPlayRoute = HowToPlayRouteImport.update({
   id: '/how-to-play',
   path: '/how-to-play',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
   '/how-to-play': typeof HowToPlayRoute
+  '/upgrades': typeof UpgradesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
   '/how-to-play': typeof HowToPlayRoute
+  '/upgrades': typeof UpgradesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,20 @@ export interface FileRoutesById {
   '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
   '/how-to-play': typeof HowToPlayRoute
+  '/upgrades': typeof UpgradesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/battle' | '/collection' | '/how-to-play'
+  fullPaths: '/' | '/battle' | '/collection' | '/how-to-play' | '/upgrades'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/battle' | '/collection' | '/how-to-play'
-  id: '__root__' | '/' | '/battle' | '/collection' | '/how-to-play'
+  to: '/' | '/battle' | '/collection' | '/how-to-play' | '/upgrades'
+  id:
+    | '__root__'
+    | '/'
+    | '/battle'
+    | '/collection'
+    | '/how-to-play'
+    | '/upgrades'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +82,18 @@ export interface RootRouteChildren {
   BattleRoute: typeof BattleRoute
   CollectionRoute: typeof CollectionRoute
   HowToPlayRoute: typeof HowToPlayRoute
+  UpgradesRoute: typeof UpgradesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/upgrades': {
+      id: '/upgrades'
+      path: '/upgrades'
+      fullPath: '/upgrades'
+      preLoaderRoute: typeof UpgradesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/how-to-play': {
       id: '/how-to-play'
       path: '/how-to-play'
@@ -107,7 +130,18 @@ const rootRouteChildren: RootRouteChildren = {
   BattleRoute: BattleRoute,
   CollectionRoute: CollectionRoute,
   HowToPlayRoute: HowToPlayRoute,
+  UpgradesRoute: UpgradesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
