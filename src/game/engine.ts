@@ -176,7 +176,8 @@ export function step(stateIn: BattleState): BattleState {
       let rally = 1;
       const allies = state.units.filter((a) => a.faction === u.faction && a.hp > 0 && a.uid !== u.uid);
       if (allies.some((a) => CARD_BY_ID(a.cardId).ability === "rally" && dist(a, u) <= 2)) rally = 1.25;
-      const dmg = Math.max(1, Math.round(atkCard.attack * ab.atk * rally - defCard.defense * db.def * 0.5));
+      const dmgMult = u.faction === "player" ? state.config.playerDmgMult : state.config.enemyDmgMult;
+      const dmg = Math.max(1, Math.round((atkCard.attack * ab.atk * rally * dmgMult) - defCard.defense * db.def * 0.5));
       target.hp -= dmg;
       u.cooldown = 2;
       if (target.hp <= 0) {
