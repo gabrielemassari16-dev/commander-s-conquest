@@ -2,6 +2,26 @@ import type { Card, Unit, Tile, Faction } from "./types";
 import { CARD_BY_ID } from "./cards";
 import { MAP_W, MAP_H, isPassable } from "./map";
 
+export interface BattleConfig {
+  playerStartGold: number;
+  enemyStartGold: number;
+  playerDmgMult: number;
+  enemyDmgMult: number;
+  playerHpMult: number;
+  enemyHpMult: number;
+  aiSpawnInterval: number; // ticks between AI spawn pulses
+}
+
+export const DEFAULT_CONFIG: BattleConfig = {
+  playerStartGold: 500,
+  enemyStartGold: 500,
+  playerDmgMult: 1,
+  enemyDmgMult: 1,
+  playerHpMult: 1,
+  enemyHpMult: 1,
+  aiSpawnInterval: 4,
+};
+
 export interface BattleState {
   map: Tile[][];
   units: Unit[];
@@ -13,20 +33,22 @@ export interface BattleState {
   log: string[];
   winner: Faction | null;
   visibility: boolean[][]; // for player fog of war
+  config: BattleConfig;
 }
 
-export function newBattle(map: Tile[][]): BattleState {
+export function newBattle(map: Tile[][], config: BattleConfig = DEFAULT_CONFIG): BattleState {
   return {
     map,
     units: [],
     tick: 0,
-    playerGold: 500,
-    enemyGold: 500,
+    playerGold: config.playerStartGold,
+    enemyGold: config.enemyStartGold,
     villagesPlayer: 0,
     villagesEnemy: 0,
     log: ["⚔️ Schiera le tue truppe nelle prime 4 colonne, poi inizia la battaglia."],
     winner: null,
     visibility: Array.from({ length: MAP_H }, () => Array(MAP_W).fill(false)),
+    config,
   };
 }
 
@@ -55,19 +77,26 @@ export function canPlace(state: BattleState, card: Card, x: number, y: number, f
 
 export function placeUnit(state: BattleState, card: Card, x: number, y: number, faction: Faction): BattleState {
   const newState = { ...state, units: [...state.units] };
+  const hpMult = faction === "player" ? state.config.playerHpMult : state.config.enemyHpMult;
   newState.units.push({
     uid: Math.random().toString(36).slice(2),
     cardId: card.id,
     faction,
     x,
     y,
-    hp: card.hp,
+    hp: Math.round(card.hp * hpMult),
     cooldown: 0,
   });
   if (faction === "player") newState.playerGold -= card.cost;
   else newState.enemyGold -= card.cost;
   return newState;
 }
+
+function maxHpFor(state: BattleState, unit: Unit): number {
+  const mult = unit.faction === "player" ? state.config.playerHpMult : state.config.enemyHpMult;
+  return Math.round(CARD_BY_ID(unit.cardId).hp * mult);
+}
+export { maxHpFor };
 
 function dist(a: Unit, b: Unit) {
   return Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
@@ -147,7 +176,8 @@ export function step(stateIn: BattleState): BattleState {
       let rally = 1;
       const allies = state.units.filter((a) => a.faction === u.faction && a.hp > 0 && a.uid !== u.uid);
       if (allies.some((a) => CARD_BY_ID(a.cardId).ability === "rally" && dist(a, u) <= 2)) rally = 1.25;
-      const dmg = Math.max(1, Math.round(atkCard.attack * ab.atk * rally - defCard.defense * db.def * 0.5));
+      const dmgMult = u.faction === "player" ? state.config.playerDmgMult : state.config.enemyDmgMult;
+      const dmg = Math.max(1, Math.round((atkCard.attack * ab.atk * rally * dmgMult) - defCard.defense * db.def * 0.5));
       target.hp -= dmg;
       u.cooldown = 2;
       if (target.hp <= 0) {
