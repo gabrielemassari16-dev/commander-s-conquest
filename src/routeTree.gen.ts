@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UpgradesRouteImport } from './routes/upgrades'
 import { Route as HowToPlayRouteImport } from './routes/how-to-play'
+import { Route as CreditsRouteImport } from './routes/credits'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as BattleRouteImport } from './routes/battle'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +24,11 @@ const UpgradesRoute = UpgradesRouteImport.update({
 const HowToPlayRoute = HowToPlayRouteImport.update({
   id: '/how-to-play',
   path: '/how-to-play',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreditsRoute = CreditsRouteImport.update({
+  id: '/credits',
+  path: '/credits',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CollectionRoute = CollectionRouteImport.update({
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
+  '/credits': typeof CreditsRoute
   '/how-to-play': typeof HowToPlayRoute
   '/upgrades': typeof UpgradesRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
+  '/credits': typeof CreditsRoute
   '/how-to-play': typeof HowToPlayRoute
   '/upgrades': typeof UpgradesRoute
 }
@@ -60,19 +68,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/battle': typeof BattleRoute
   '/collection': typeof CollectionRoute
+  '/credits': typeof CreditsRoute
   '/how-to-play': typeof HowToPlayRoute
   '/upgrades': typeof UpgradesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/battle' | '/collection' | '/how-to-play' | '/upgrades'
+  fullPaths:
+    | '/'
+    | '/battle'
+    | '/collection'
+    | '/credits'
+    | '/how-to-play'
+    | '/upgrades'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/battle' | '/collection' | '/how-to-play' | '/upgrades'
+  to:
+    | '/'
+    | '/battle'
+    | '/collection'
+    | '/credits'
+    | '/how-to-play'
+    | '/upgrades'
   id:
     | '__root__'
     | '/'
     | '/battle'
     | '/collection'
+    | '/credits'
     | '/how-to-play'
     | '/upgrades'
   fileRoutesById: FileRoutesById
@@ -81,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BattleRoute: typeof BattleRoute
   CollectionRoute: typeof CollectionRoute
+  CreditsRoute: typeof CreditsRoute
   HowToPlayRoute: typeof HowToPlayRoute
   UpgradesRoute: typeof UpgradesRoute
 }
@@ -99,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/how-to-play'
       fullPath: '/how-to-play'
       preLoaderRoute: typeof HowToPlayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/credits': {
+      id: '/credits'
+      path: '/credits'
+      fullPath: '/credits'
+      preLoaderRoute: typeof CreditsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/collection': {
@@ -129,9 +159,20 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BattleRoute: BattleRoute,
   CollectionRoute: CollectionRoute,
+  CreditsRoute: CreditsRoute,
   HowToPlayRoute: HowToPlayRoute,
   UpgradesRoute: UpgradesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
