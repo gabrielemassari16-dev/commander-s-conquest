@@ -183,7 +183,12 @@ export function step(stateIn: BattleState): BattleState {
       target.hp -= dmg;
       u.cooldown = 2;
       if (target.hp <= 0) {
-        state.log.push(`💥 ${atkCard.name} (${u.faction === "player" ? "TU" : "AI"}) elimina ${defCard.name}`);
+        const bounty = state.config.killBounty;
+        if (u.faction === "player") state.playerGold += bounty;
+        else state.enemyGold += bounty;
+        state.log.push(
+          `💥 ${atkCard.name} (${u.faction === "player" ? "TU" : "AI"}) elimina ${defCard.name} (+${bounty}💰)`,
+        );
       }
     } else {
       // move toward target
