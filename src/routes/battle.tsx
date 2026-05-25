@@ -24,6 +24,8 @@ import {
   aiHpMult,
   aiSpawnInterval,
   aiDifficultyLabel,
+  playerKillBounty,
+  aiKillBounty,
   recordWin,
   recordLoss,
 } from "@/game/progression";
@@ -53,6 +55,8 @@ function buildConfig(): BattleConfig {
     playerHpMult: playerHpMult(p),
     enemyHpMult: aiHpMult(p),
     aiSpawnInterval: aiSpawnInterval(p),
+    playerKillBounty: playerKillBounty(),
+    enemyKillBounty: aiKillBounty(p),
   };
 }
 
