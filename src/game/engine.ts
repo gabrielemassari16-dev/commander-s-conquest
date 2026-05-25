@@ -10,7 +10,8 @@ export interface BattleConfig {
   playerHpMult: number;
   enemyHpMult: number;
   aiSpawnInterval: number; // ticks between AI spawn pulses
-  killBounty: number; // gold awarded to faction per enemy killed
+  playerKillBounty: number;
+  enemyKillBounty: number;
 }
 
 export const DEFAULT_CONFIG: BattleConfig = {
@@ -21,7 +22,8 @@ export const DEFAULT_CONFIG: BattleConfig = {
   playerHpMult: 1,
   enemyHpMult: 1,
   aiSpawnInterval: 4,
-  killBounty: 25,
+  playerKillBounty: 25,
+  enemyKillBounty: 25,
 };
 
 export interface BattleState {
