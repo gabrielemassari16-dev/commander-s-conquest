@@ -31,6 +31,7 @@ function Home() {
           <Link to="/upgrades" className="btn-ghost text-sm">Quartier Generale</Link>
           <Link to="/collection" className="btn-ghost text-sm">Collezione</Link>
           <Link to="/how-to-play" className="btn-ghost text-sm">Come si gioca</Link>
+          <Link to="/credits" className="btn-ghost text-sm">Crediti</Link>
         </nav>
       </header>
 
@@ -41,7 +42,7 @@ function Home() {
           width={1920}
           height={1080}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: "brightness(0.55) saturate(1.1)" }}
+          style={{ filter: "brightness(0.5) saturate(1.15) contrast(1.1)" }}
         />
         <div
           className="absolute inset-0"
@@ -53,12 +54,13 @@ function Home() {
         <div className="relative max-w-3xl text-center">
           <p className="text-[color:var(--gold)] tracking-[0.4em] text-xs mb-4">COMANDANTE SUPREMO</p>
           <h1 className="text-5xl md:text-7xl font-display font-bold leading-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.7)]">
-            Conquista la mappa.<br />
-            <span className="text-[color:var(--gold)]">Comanda il fronte.</span>
+            La mappa è tua.<br />
+            <span className="text-[color:var(--gold)]">Devi solo prenderla.</span>
           </h1>
           <p className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto">
-            Recluta truppe, schiera mezzi corazzati, sfrutta i biomi e supera l'AI nemica
-            in battaglie strategiche in tempo reale.
+            Recluta truppe disegnate a mano, sfrutta foreste, montagne e villaggi,
+            e fai pagare ogni nemico abbattuto — ogni uccisione ti riempie la cassa.
+            Vinci, potenzia il tuo esercito, affronta un'AI che impara dalle tue vittorie.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Link to="/battle" className="btn-primary">Inizia battaglia</Link>
@@ -84,25 +86,31 @@ function Home() {
         </div>
       </section>
 
-      <section className="px-6 py-12 bg-[color:var(--card)]/40 border-t border-border">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { e: "🃏", t: "10+ Carte", d: "Leader, soldati e mezzi illustrati" },
-            { e: "🗺️", t: "Mappa dinamica", d: "Fog of war e villaggi" },
-            { e: "🌍", t: "6 Biomi", d: "Ogni terreno conta" },
-            { e: "📈", t: "Progressione", d: "AI più forte, tu più potente" },
-          ].map((f) => (
-            <div key={f.t} className="panel p-4">
-              <div className="text-3xl">{f.e}</div>
-              <div className="font-display font-bold mt-2">{f.t}</div>
-              <div className="text-xs text-muted-foreground">{f.d}</div>
-            </div>
-          ))}
+      <section className="px-6 py-14 bg-[color:var(--card)]/40 border-t border-border">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-display text-3xl text-center mb-8">
+            Cosa rende <span className="text-[color:var(--gold)]">Fantaguerra</span> diverso
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { e: "🃏", t: "Carte disegnate", d: "10+ unità con stile fatto a mano" },
+              { e: "💰", t: "Taglie sui nemici", d: "Ogni kill ti dà oro per spingere oltre" },
+              { e: "🗺️", t: "Mappe organiche", d: "Foreste, montagne, mari, villaggi" },
+              { e: "🤖", t: "AI che cresce", d: "Più vinci, più diventa pericolosa" },
+            ].map((f) => (
+              <div key={f.t} className="panel p-4">
+                <div className="text-3xl">{f.e}</div>
+                <div className="font-display font-bold mt-2">{f.t}</div>
+                <div className="text-xs text-muted-foreground">{f.d}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <footer className="px-6 py-4 text-center text-xs text-muted-foreground border-t border-border">
-        Fantaguerra · Prototipo strategico
+      <footer className="px-6 py-6 text-center text-xs text-muted-foreground border-t border-border">
+        Fantaguerra · Strategia di guerra a carte ·{" "}
+        <Link to="/credits" className="text-[color:var(--gold)] underline">Crediti</Link>
       </footer>
     </main>
   );

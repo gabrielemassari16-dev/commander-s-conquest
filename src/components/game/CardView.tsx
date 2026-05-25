@@ -33,9 +33,9 @@ export function CardView({
       onClick={onClick}
       disabled={disabled}
       className={[
-        "panel text-left w-full transition-all overflow-hidden group",
-        selected ? "gold-border ring-2 ring-[color:var(--gold)]" : "hover:border-[color:var(--gold)]",
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:-translate-y-0.5",
+        "card-handdrawn text-left w-full transition-all overflow-hidden group",
+        selected ? "ring-2 ring-[color:var(--gold)] -translate-y-0.5" : "hover:border-[color:var(--gold)]",
+        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:-translate-y-0.5 hover:rotate-[-0.4deg]",
       ].join(" ")}
       style={{ padding: 0 }}
     >

@@ -10,6 +10,8 @@ export interface BattleConfig {
   playerHpMult: number;
   enemyHpMult: number;
   aiSpawnInterval: number; // ticks between AI spawn pulses
+  playerKillBounty: number;
+  enemyKillBounty: number;
 }
 
 export const DEFAULT_CONFIG: BattleConfig = {
@@ -20,6 +22,8 @@ export const DEFAULT_CONFIG: BattleConfig = {
   playerHpMult: 1,
   enemyHpMult: 1,
   aiSpawnInterval: 4,
+  playerKillBounty: 25,
+  enemyKillBounty: 25,
 };
 
 export interface BattleState {
@@ -181,7 +185,12 @@ export function step(stateIn: BattleState): BattleState {
       target.hp -= dmg;
       u.cooldown = 2;
       if (target.hp <= 0) {
-        state.log.push(`💥 ${atkCard.name} (${u.faction === "player" ? "TU" : "AI"}) elimina ${defCard.name}`);
+        const bounty = u.faction === "player" ? state.config.playerKillBounty : state.config.enemyKillBounty;
+        if (u.faction === "player") state.playerGold += bounty;
+        else state.enemyGold += bounty;
+        state.log.push(
+          `💥 ${atkCard.name} (${u.faction === "player" ? "TU" : "AI"}) elimina ${defCard.name} (+${bounty}💰)`,
+        );
       }
     } else {
       // move toward target
