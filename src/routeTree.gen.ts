@@ -74,21 +74,9 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/battle'
-    | '/collection'
-    | '/credits'
-    | '/how-to-play'
-    | '/upgrades'
+  fullPaths: '/' | '/battle' | '/collection' | '/credits' | '/how-to-play' | '/upgrades'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/battle'
-    | '/collection'
-    | '/credits'
-    | '/how-to-play'
-    | '/upgrades'
+  to: '/' | '/battle' | '/collection' | '/credits' | '/how-to-play' | '/upgrades'
   id:
     | '__root__'
     | '/'
