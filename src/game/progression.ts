@@ -69,6 +69,14 @@ export function aiHpMult(p: Progression) {
 export function aiSpawnInterval(p: Progression) {
   return Math.max(2, 4 - Math.floor(p.wins / 3));
 }
+// Both player and AI earn this much gold per enemy killed.
+// AI scaling: more wins → AI kills give it more income, snowballing pressure.
+export function playerKillBounty() {
+  return 25;
+}
+export function aiKillBounty(p: Progression) {
+  return 25 + Math.min(p.wins, 12) * 3;
+}
 export function aiDifficultyLabel(p: Progression) {
   const w = p.wins;
   if (w === 0) return "Recluta";
