@@ -185,7 +185,7 @@ export function step(stateIn: BattleState): BattleState {
       target.hp -= dmg;
       u.cooldown = 2;
       if (target.hp <= 0) {
-        const bounty = state.config.killBounty;
+        const bounty = u.faction === "player" ? state.config.playerKillBounty : state.config.enemyKillBounty;
         if (u.faction === "player") state.playerGold += bounty;
         else state.enemyGold += bounty;
         state.log.push(
