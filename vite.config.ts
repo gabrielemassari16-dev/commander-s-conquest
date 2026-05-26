@@ -12,13 +12,17 @@ const isUserSite = repositoryName.endsWith(".github.io");
 const githubPagesBase =
   isGithubPagesBuild && repositoryName && !isUserSite ? `/${repositoryName}/` : "/";
 
-// Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-// @cloudflare/vite-plugin builds from this — wrangler.jsonc main alone is insufficient.
 export default defineConfig({
   vite: {
     base: githubPagesBase,
   },
   tanstackStart: {
-    server: { entry: "server" },
+    server: {
+      preset: 'github-pages', // Tells Nitro (under the hood) to build for static hosting
+      prerender: {
+        routes: ['/'], // Add any other routes you want statically generated here
+        crawlLinks: true
+      }
+    },
   },
 });
