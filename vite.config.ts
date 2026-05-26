@@ -1,4 +1,6 @@
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "";
 const isGithubPagesBuild = process.env.GITHUB_PAGES === "true";
@@ -7,11 +9,18 @@ const githubPagesBase =
   isGithubPagesBuild && repositoryName && !isUserSite ? `/${repositoryName}/` : "/";
 
 export default defineConfig({
-  vite: {
-    base: githubPagesBase,
+  plugins: [react(), tsconfigPaths()],
+  base: githubPagesBase,
+  build: {
+    outDir: 'dist/client',
+    emptyOutDir: true,
   },
-  tanstackStart: {
-    ssr: false, // <-- AGGIUNGI QUESTA RIGA: Disabilita il server per creare una SPA statica
-    server: { entry: "server" },
-  },
-});
+  css: {
+    postcss: {
+      plugins: [
+        require('tailwindcss'),
+        require('autoprefixer'),
+      ],
+    },
+  }
+})
